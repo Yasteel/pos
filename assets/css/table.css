@@ -1,0 +1,260 @@
+/* =========Sales=========== */
+.sales .items table :is(.fas.fa-minus:hover, .fas.fa-plus:hover)
+{
+	color: var(--l_blue);
+}
+
+.sales .items table{
+	table-layout: fixed;
+	display: table;
+	width: 100%;
+	height: calc(100% - 6rem);
+	border-collapse: collapse;
+}
+
+
+.sales .items table tbody{
+	display: block;
+	max-height: calc(100vh - 15rem);
+	overflow: hidden;
+	overflow-y: auto;
+	scrollbar-color: var(--l_blue) black;
+  scrollbar-width: thin;
+}
+
+.sales .items table tbody tr
+{
+	height: 50px;
+}
+.sales .items table :is(thead,tbody tr){
+	display: table;
+	width: 100%;
+}
+.sales .items table th{
+	background: var(--l_white);
+	font-weight: 500;
+	padding: .5rem 0;
+}
+
+.sales .items table td
+{
+	color: var(--l_white);
+}
+
+.sales .items table :is(th,td)
+{
+	padding: .3rem .2rem;
+}
+
+.sales .items table tr:nth-child(even)
+{
+	background: #D8DBE21A;
+}
+
+.sales .items table :is(th:nth-child(3), th:nth-child(4), td:nth-child(3), td:nth-child(4))
+{
+	width: 10%;
+	text-align: right;
+}
+.sales .items table :is(th:nth-child(2), th:nth-child(n+5), td:nth-child(2), td:nth-child(n+5))
+{
+	width: 5%;
+	text-align: center;
+}
+
+.sales .items table td i { cursor: pointer; }
+
+.sales .items table td i.fa-pen:hover,
+.sales .items table td i.fa-info-circle:hover
+{
+	color: var(--l_blue);
+}
+
+.sales .items table td i.fa-times-circle:hover
+{
+	color: red;
+}
+
+/* =========Sales=========== */
+
+
+/* =========Products=========== */
+.products .items table{
+	table-layout: fixed;
+	display: table;
+	width: 100%;
+	height: calc(100% - 6rem);
+	border-collapse: collapse;
+}
+
+
+.products .items table tbody{
+	display: block;
+	max-height: calc(100vh - 15rem);
+	overflow: hidden;
+	overflow-y: auto;
+	scrollbar-color: var(--l_blue) black;
+  scrollbar-width: thin;
+}
+
+.products .items table tbody tr
+{
+	height: 50px;
+}
+.products .items table :is(thead,tbody tr){
+	display: table;
+	width: 100%;
+}
+.products .items table th{
+	background: var(--l_white);
+	font-weight: 500;
+	padding: .5rem 0;
+}
+
+.products .items table td
+{
+	color: var(--l_white);
+}
+
+.products .items table :is(th,td)
+{
+	padding: .3rem .2rem;
+}
+
+.products .items table tr:nth-child(even)
+{
+	background: #D8DBE21A;
+}
+
+.products .items table :is(th:nth-child(3), th:nth-child(4), td:nth-child(3), td:nth-child(4))
+{
+	width: 10%;
+	text-align: right;
+}
+.products .items table :is(th:nth-child(2), th:nth-child(n+5), td:nth-child(2), td:nth-child(n+5))
+{
+	width: 5%;
+	text-align: center;
+}
+
+.products .items table td i { cursor: pointer; }
+
+.products .items table td i.fa-pen:hover,
+.products .items table td i.fa-info-circle:hover
+{
+	color: var(--l_blue);
+}
+
+.products .items table td i.fa-times-circle:hover
+{
+	color: red;
+}
+
+/*  */
+
+.products .items table :is(th:nth-child(1), th:nth-child(7), th:nth-child(8), th:nth-child(9), td:nth-child(1), td:nth-child(7), td:nth-child(8), td:nth-child(9))
+{
+	width: 7%;
+}
+
+.products .items table th:nth-child(2),
+.products .items table td:nth-child(2)
+{
+	width: 32%;
+}
+
+.products .items table :is(th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6), td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6))
+{
+	width: 10%;
+}
+
+/* =========Products=========== */
+
+
+
+/* =========Users=========== */
+.users .items table{
+	table-layout: fixed;
+	display: table;
+	width: 100%;
+	height: calc(100% - 6rem);
+	border-collapse: collapse;
+}
+
+
+.users .items table tbody{
+	display: block;
+	max-height: calc(100vh - 15rem);
+	overflow: hidden;
+	overflow-y: auto;
+	scrollbar-color: var(--l_blue) black;
+  scrollbar-width: thin;
+}
+
+.users .items table tbody tr
+{
+	height: 50px;
+}
+.users .items table :is(thead,tbody tr){
+	display: table;
+	width: 100%;
+}
+.users .items table th{
+	background: var(--l_white);
+	font-weight: 500;
+	padding: .5rem 0;
+}
+
+.users .items table td
+{
+	color: var(--l_white);
+}
+
+.users .items table :is(th,td)
+{
+	padding: .3rem .2rem;
+}
+
+.users .items table tr:nth-child(even)
+{
+	background: #D8DBE21A;
+}
+
+.users .items table :is(th:nth-child(1), th:nth-child(2), th:nth-child(3), td:nth-child(1), td:nth-child(2), td:nth-child(3))
+{
+	width: 30%;
+  text-align: left;
+}
+
+.users .items table :is(th:nth-child(4), th:nth-child(5), td:nth-child(4), td:nth-child(5))
+{
+  width: 5%;
+  text-align: center;
+}
+
+/* .users .items table :is(th:nth-child(3), th:nth-child(4), td:nth-child(3), td:nth-child(4))
+{
+	width: 10%;
+	text-align: right;
+}
+.users .items table :is(th:nth-child(2), th:nth-child(n+5), td:nth-child(2), td:nth-child(n+5))
+{
+	width: 5%;
+	text-align: center;
+} */
+
+.users .items table td i { cursor: pointer; }
+
+.users .items table td i.fa-pen:hover,
+.users .items table td i.fa-info-circle:hover
+{
+	color: var(--l_blue);
+}
+
+.users .items table td i.fa-times-circle:hover
+{
+	color: red;
+}
+
+
+/* =========Users=========== */

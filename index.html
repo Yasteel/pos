@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login - Master POS</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/438c576884.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/presets.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/login_style.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+
+      </div>
+      <div class="body">
+        <div class="login">
+          <div class="card_h">
+            <h2>Login</h2>
+          </div>
+          <div class="card_b">
+            <select id="branches">
+              <option value="000">Select Branch</option>
+              <option value="002">Aweh</option>
+              <option value="003">Awehz</option>
+            </select>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="pass" placeholder="Password">
+            <button class="btn_login">Login</button>
+          </div>
+        </div>
+      </div>
+      <div class="alert_message">
+        <p class="message"></p>
+        <span><i class="message_type_icon fas"></i></span>
+      </div>
+    </div>
+    <script type="text/javascript" src="assets/js/presets.js"></script>
+    <script type="text/javascript" src="assets/js/login.js"></script>
+  </body>
+</html>

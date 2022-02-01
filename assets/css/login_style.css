@@ -1,0 +1,72 @@
+.wrapper
+{
+	width: 100vw;
+	height: 100vh;
+	background: var(--l_black);
+	overflow: hidden;
+}
+
+.header
+{
+	width: 100%;
+	height: 75px;
+	background: var(--d_white);
+}
+
+.body
+{
+	width: 100%;
+	height: calc(100% - 75px);
+	display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: var(--d_white);
+}
+
+.login .card_h
+{
+  height: 75px;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--l_black);
+}
+
+.login .card_b
+{
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login .card_b > *
+{
+  width: 100%;
+  height: 50px;
+  padding: 0 1.2rem;
+  border: 1px solid var(--l_black);
+  color: var(--l_black);
+  background: var(--d_white);
+  cursor: pointer;
+}
+
+
+.login .card_b button:hover,
+.login .card_b button:focus
+{
+  background: var(--l_blue);
+  color: black;
+  border: none;
+}

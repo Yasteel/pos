@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- <link rel="shortcut icon" type="image/png" href="assets/icon/favicon.png"> -->
+    <title>pos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/438c576884.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/presets.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/table.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="message">
+          <h2>Welcome, <span></span></h2>
+        </div>
+        <div class="sales_btns">
+          <input type="text" id="search_txt" placeholder="Enter Barcode / Product ID">
+          <button id="btn_product_search"><i class="fas fa-search"></i></button>
+          <button id="btn_filter_search"><i class="fas fa-search"></i>Filter Search</button>
+          <button id="btn_sales_rep"><i class="fas fa-user-plus"></i>Add Sales Rep</button>
+        </div>
+        <div class="products_btns">
+          <input type="text" id="product_search" placeholder="Search for Product">
+          <select id="category"></select>
+          <select id="subcat">
+            <option value="0">Sub-category</option>
+          </select>
+          <button id="btn_filter"><i class="fas fa-filter"></i> Filter</button>
+          <button class="btn_add_product" title="Add Product"><i class="fas fa-plus"></i> Create Product</button>
+          <button class="btn_manage_cats" title="Add or Remove Categories/sub-Categories"><i class="fas fa-cogs"></i> Manage Categories</button>
+        </div>
+        <div class="user_btns">
+          <button id="btn_open_add_user_modal"><i class="fas fa-user-plus"></i> Add User</button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="nav">
+          <button id="btn_sale"><i class="fas fa-dollar-sign"></i>Sale</button>
+          <button id="btn_products"><i class="fas fa-cogs"></i>Manage Products</button>
+          <button id="btn_users"><i class="fas fa-user-cog"></i>Manage Users</button>
+          <button id="btn_log_out"><i class="fas fa-door-open"></i>Log out</button>
+          <div class="options">
+            <button id="btn_start_sale">Start New Sale</button>
+            <button id="btn_resume_sale" >Resume Suspended Sale</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="sales">
+            <div class="items">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Cost</th>
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+              <div class="operations">
+                <div class="total">
+                  <p>Total: R<span></span></p>
+                </div>
+                <div class="sale_btns">
+                  <button class="cancel" id="btn_cancel" ><i class="fas fa-times-circle"></i> Cancel Sale</button>
+                  <button class="save" id="btn_save"><i class="fas fa-save"></i> Save Sale</button>
+                  <button class="checkout" id="btn_checkout"><i class="fas fa-shopping-cart"></i> checkout</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="products">
+            <div class="items">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>SOH</th>
+                    <th>Barcode</th>
+                    <th>Modified</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="users">
+            <div class="items">
+              <table id="users">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Role</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="alert_message">
+        <p class="message"></p>
+        <span><i class="message_type_icon fas"></i></span>
+      </div>
+      <div class="modal cats_management">
+        <div class="card">
+          <div class="card_header"><h2>Category Management</h2><i class="fas fa-times-circle"></i></div>
+          <div class="card_body">
+            <div class="card_kids">
+              <select class="cat" id="del_cat">
+              </select>
+              <button class="delete_cat"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+            <div class="card_kids">
+              <select class="cat" id="del_subcat">
+              </select>
+              <button class="delete_subcat"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+            <hr>
+            <div class="card_kids">
+              <input type="text" id="add_cat" placeholder="Category">
+              <button class="add_cat"><i class="fas fa-plus"></i> Add</button>
+            </div>
+            <div class="card_kids">
+              <select class="cat" id="add_subcat_cat">
+              </select>
+              <input type="text" placeholder="Sub-category" id="add_subcat">
+              <button class="add_subcat"><i class="fas fa-plus"></i> Add</button>
+            </div>
+            <hr>
+            <div class="card_kids">
+              <select class="cat" id="mod_cat_cat">
+              </select>
+              <input type="text" placeholder="Category" id="mod_cat">
+              <button class="modify_cat"><i class="fas fa-pen"></i> Modify</button>
+            </div>
+            <div class="card_kids">
+              <select class="cat" id="mod_subcat">
+              </select>
+              <input type="text" placeholder="Sub-category" id="mod_sub">
+              <button class="modify_subcat"><i class="fas fa-pen"></i> Modify</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal product_add">
+        <div class="card">
+          <div class="card_header">
+            <h2>Add Product</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card_body">
+            <div class="card_kids">
+              <input type="text" class="description" id="description" placeholder="Description">
+            </div>
+            <div class="card_kids">
+              <select name="" id="add_product_cat" class="cat">
+                <option value="0">Choose Category</option>
+                <option value=""></option>
+                <option value=""></option>
+              </select>
+            </div>
+            <div class="card_kids">
+              <select name="" id="add_product_subcat" class="subcat">
+                <option value="">Choose Sub-category</option>
+              </select>
+            </div>
+            <div class="card_kids">
+              <input type="text" class="cost" id="cost" placeholder="Cost">
+            </div>
+            <div class="card_kids">
+              <input type="text" class="qty" id="qty" placeholder="Qty">
+            </div>
+            <div class="card_kids">
+              <button class="add_product"><i class="fas fa-plus"></i> Create Product</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal product_edit">
+        <div class="card">
+          <div class="card_header">
+            <h2>Modify Product</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card_body">
+            <div class="card_kids">
+              <input type="text" class="description" id="description" placeholder="Description">
+            </div>
+            <div class="card_kids">
+              <select name="" id="add_product_cat" class="cat">
+                <option value="0">Choose Category</option>
+                <option value=""></option>
+                <option value=""></option>
+              </select>
+            </div>
+            <div class="card_kids">
+              <select name="" id="add_product_subcat" class="subcat">
+                <option value="">Choose Sub-category</option>
+              </select>
+            </div>
+            <div class="card_kids">
+              <input type="text" class="cost" id="cost" placeholder="Cost">
+            </div>
+            <div class="card_kids">
+              <input type="text" class="qty" id="qty" placeholder="Qty">
+            </div>
+            <div class="card_kids">
+              <button class="modify_product"><i class="fas fa-pen"></i> Modify Product</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal checkout">
+        <div class="card">
+          <div class="card_header">
+            <h2>Checkout</h2>
+          </div>
+          <div class="card_bodys">
+            <div class="row">
+              <input type="text" id="cost" disabled>
+            </div>
+            <div class="row">
+              <select id="tender">
+                <option value="0">Select Tender</option>
+              </select>
+            </div>
+            <div class="row">
+              <input type="text" id="amount" placeholder="Enter Amount">
+            </div>
+            <div class="row">
+              <button id="btn_back"><i class="fas fa-arrow-left"></i>Back</button>
+            </div>
+            <div class="row">
+              <button id="btn_proceed"><i class="fas fa-money-bill-alt"></i>Proceed</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal user_add">
+        <div class="card">
+          <div class="card_header">
+            <h2>Add New User</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card_body">
+            <input type="text" id="username" placeholder="Username">
+            <input type="text" id="password" placeholder="Password">
+            <input type="text" id="user_name" placeholder="Name">
+            <input type="text" id="user_surname" placeholder="Surname">
+            <select id="branches"><option value="0">Choose Branch</option></select>
+            <select id="role"><option value="0">Choose Role</option></select>
+            <button id="btn_add_user"><i class="fas fa-user-plus"></i> Add User</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal user_edit">
+        <div class="card">
+          <div class="card_header">
+            <h2>Username</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card_body">
+            <div class="row">
+              <div class="col"><p>Name</p></div>
+              <div class="col"><input type="text" id="user_name"></div>
+            </div>
+            <div class="row">
+              <div class="col"><p>Surname</p></div>
+              <div class="col"><input type="text" id="user_surname"></div>
+            </div>
+            <div class="row">
+              <div class="col">Password</div>
+              <div class="col"><input type="text" id="password"></div>
+            </div>
+            <div class="row">
+              <div class="col"><p>Role</p></div>
+              <div class="col">
+                <select id="role"></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col"><p>Branch</p></div>
+              <div class="col">
+                <select id="branch"></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col btns">
+                <button id="btn_save_user_info"><i class="fas fa-save"></i> Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="assets/js/presets.js"></script>
+    <script type="text/javascript" src="assets/js/script.js"></script>
+  </body>
+</html>
+
+<!-- .modal.product_add>.card>.card_header>h2{Add Product}+i.fas.fa-times-circle^.card_body -->

@@ -1,0 +1,534 @@
+.wrapper
+{
+	width: 100vw;
+	height: 100vh;
+	background: var(--l_black);
+	overflow: hidden;
+}
+
+.header
+{
+	width: 100%;
+	height: 75px;
+	padding: 0 1rem;
+	background: var(--l_white);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 2rem;
+}
+
+.header .message
+{
+	display: grid;
+	place-items: center;
+	height: 100%;
+}
+
+.header .message h2 span
+{
+	text-transform: capitalize;
+}
+
+.header > div:not(.message)
+{
+	height: 100%;
+	display: none;
+	align-items: center;
+}
+
+.header > div:not(.message) :is(input,button,select)
+{
+	height: 45px;
+	background: none;
+	border: 1px solid var(--l_black);
+	padding: 0 1rem;
+	margin-right: .5rem;
+	border-radius: var(--radius_m);
+
+	transition: border 300ms ease-in-out;
+}
+
+
+.header > div:not(.message) button
+{
+	cursor: pointer;
+}
+
+.header > div:not(.message) button i
+{
+	margin-right: .6rem;
+	transition: color 300ms ease-in-out;
+}
+
+.header > div:not(.message) button:hover
+{
+	border-color: var(--l_blue);
+	border-width: 2px;
+}
+
+.header > div:not(.message) button:hover i
+{
+	color: var(--l_blue);
+}
+
+.header > div:not(.message) #btn_filter
+{
+	margin-right: 1.5rem;
+}
+
+.body
+{
+	width: 100%;
+	height: calc(100% - 75px);
+	display: flex;
+}
+
+.nav
+{
+	height: 100%;
+	width: 250px;
+	background: var(--l_white);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+}
+
+.nav .options
+{
+	background: var(--l_white);
+	width: 100%;
+	height: 100px;
+	position: absolute;
+	top: 0;
+	left: 100%;
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	/* gap: 10px; */
+}
+
+.nav .options button
+{
+	width: 100%;
+	height: 50px;
+	font-size: .8rem;
+	background: none;
+	border: 1px solid var(--l_black);
+	color: var(--l_black);
+}
+
+.nav button
+{
+	width: 100%;
+	height: 120px;
+	text-align: left;
+	padding: 0 1rem;
+	color: var(--l_black);
+	border: none;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-size: 1.1rem;
+	border-top: 1px solid var(--l_blue);
+}
+
+.nav button i
+{
+	margin-right: 1rem;
+}
+
+.nav button:focus,
+.nav button:hover
+{
+	background: var(--l_blue);
+	color: black;
+}
+
+.content
+{
+	height: 100%;
+	width: calc(100% - 250px);
+	padding: 10px;
+}
+
+/* =========================Styles for Sales section========================= */
+.sales
+{
+	width: 100%;
+	height: 100%;
+	display: none;
+	flex-direction: column;
+}
+
+
+/* Sales - Item Listing */
+.sales .items
+{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.items .operations
+{
+	height: 75px;
+	padding: 0 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--l_white);
+}
+
+.operations .total
+{
+	font-size: 1.2rem;
+}
+
+.operations .total span
+{
+	margin-left: 1rem;
+}
+
+.operations .sale_btns button
+{
+	height: 50px;
+	width: 150px;
+	background: none;
+	border: 1px solid var(--l_black);
+	color: var(--l_black);
+	cursor: pointer;
+	transition: border 300ms ease-in-out;
+	border-radius: var(--radius_m);
+}
+
+.operations .sale_btns button i
+{
+ transition: color 300ms ease-int-out;
+ margin-right: .6rem;
+}
+
+.operations .sale_btns button:hover,
+.operations .sale_btns button:focus
+{
+	border: 2px solid var(--l_blue);
+}
+
+.operations .sale_btns button:hover i,
+.operations .sale_btns button:focus i
+{
+	color: var(--l_blue);
+}
+/* Sales - Totals */
+/* =========================Styles for Sales section========================= */
+
+/* =========================Styles for Products========================= */
+.products
+{
+	display: none;
+	justify-content: space-between;
+	height: 100%;
+}
+
+/* =========================Styles for Products========================= */
+
+.show
+{
+	display: flex !important;
+}
+
+/* =========================Modals - Create Product========================= */
+.modal
+{
+	width: 100vw;
+	height: 100vh;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	background: var(--l_white_o);
+}
+
+.modal .card
+{
+	min-width: 40vw;
+	min-height: 400px;
+	border-radius: var(--radius_d);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: var(--l_white);
+}
+
+.modal.product_add .card ,
+.modal.product_edit .card
+{height: 450px;}
+
+.modal .card > div
+{
+	width: 100%;
+}
+
+.modal .card .card_header
+{
+	border-top-left-radius: var(--radius_d);
+	border-top-right-radius: var(--radius_d);
+	padding: 0 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 50px;
+	background: var(--l_black);
+	color: var(--l_white);
+}
+
+.modal .card .card_header i.fa-times-circle
+{
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+.modal .card .card_header i.fa-times-circle:hover
+{
+	color: var(--error);
+}
+
+.modal .card .card_body
+{
+	padding: 1rem;
+	width: 100%;
+	height: calc(100% - 50px);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+}
+
+.modal .card .card_body .card_kids
+{
+	width: 100%;
+	height: 45px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 1rem;
+}
+
+.modal .card .card_body .card_kids > *
+{
+	height: 45px;
+	background: none;
+	border: 1px solid var(--l_black);
+	border-radius: var(--radius_m);
+	transition: border 300ms ease-in-out;
+}
+
+.modal .card .card_body .card_kids button
+{
+	min-width: 100px;
+	padding: 0 1rem;
+	cursor: pointer;
+}
+
+.modal .card .card_body .card_kids button i
+{
+	margin-right: .6rem;
+	transition: color 300ms ease-in-out;
+}
+
+.modal .card .card_body .card_kids button:hover
+{
+	border-color: var(--l_blue);
+	border-width: 2px;
+}
+
+.modal .card .card_body .card_kids button:hover i
+{
+	color: var(--l_blue);
+}
+
+.modal .card .card_body .card_kids :is(select,input)
+{
+	padding: 0 .6rem;
+}
+
+.modal .card .card_body hr
+{
+	width: 100%;
+	height: 3px;
+	background: var(--l_black);
+}
+
+.modal.product_add .card .card_body .card_kids ,
+.modal.product_edit .card .card_body .card_kids
+{ justify-content: flex-start;}
+
+.modal.product_add .description ,
+.modal.product_edit .description
+{ width: 100%; }
+
+.modal.product_add select ,
+.modal.product_edit select
+{ width: 70%; }
+
+.modal.product_add .qty ,
+.modal.product_edit .qty
+{ width: 100px; }
+
+
+/* =============================== */
+
+.modal.checkout .card
+{
+	width: 300px;
+	height: 300px;
+}
+
+.modal.checkout .card .card_header
+{
+	width: 100%;
+	height: 50px;
+}
+
+.modal.checkout .card .card_bodys
+{
+	height: calc(100% - 50px);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.modal.checkout .card .card_bodys .row
+{
+	width: 100%;
+	height: 50px;
+	display: flex;
+	padding: 0 2rem;
+}
+
+.modal.checkout .card .card_bodys .row > *
+{
+	flex-grow: 1;
+	padding: 0 1.5rem;
+	background: none;
+	border: 1px solid var(--l_black);
+	border-radius: var(--radius_m);
+	transition: border var(--transition);
+}
+
+.modal.checkout .card .card_bodys .row :is(input#cost, input#outstanding)
+{
+	border: none;
+	font-size: 16px;
+}
+
+.modal.checkout .card .card_bodys .row :is(button, select):hover
+{
+	border: 2px solid var(--l_blue);
+	cursor: pointer;
+}
+
+.modal.checkout .card .card_bodys .row > button i
+{
+	margin-right: 1rem;
+	transition: color var(--transition);
+}
+
+.modal.checkout .card .card_bodys .row > button:hover i
+{
+	color: var(--l_blue);
+}
+
+.users {display: none;}
+
+.modal.user_add .card
+{
+	height: 300px;
+	min-width: 500px;
+}
+
+.modal.user_add .card .card_body
+{
+	height: calc(100% - 50px);
+	display: flex;
+	justify-content: center;
+}
+
+.modal.user_add .card .card_body > *
+{
+	width: 100%;
+	height: 50px;
+	background: none;
+	border: 1px solid var(--l_black);
+	border-radius: var(--radius_m);
+	padding: 0 1rem;
+	transition: border var(--transition);
+}
+
+.modal.user_add .card .card_body > *:focus,
+.modal.user_add .card .card_body button:focus,
+.modal.user_add .card .card_body button:hover
+{
+	border: 2px solid var(--l_blue);
+}
+
+.modal.user_add .card .card_body button { cursor: pointer; }
+
+.modal.user_add .card .card_body button i
+{
+	transition: color var(--transition);
+}
+
+.modal.user_add .card .card_body button:hover i
+{
+	color: var(--l_blue);
+}
+
+
+
+/* =============================== */
+.modal.user_edit .card
+{
+	min-width: 500px;
+}
+
+.modal.user_edit .card_body
+{
+	width: 100%;
+	display: flex;
+}
+
+.modal.user_edit .card_body .row
+{
+	width: 500px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal.user_edit .card_body .row .col
+{
+	height: 100%;
+}
+
+.modal.user_edit .card_body .row .col:not(.col.btns):first-child
+{
+	width: 150px;
+
+	text-align: right;
+	padding: 0 1rem;
+}
+
+.modal.user_edit .card_body .row
+{
+
+}

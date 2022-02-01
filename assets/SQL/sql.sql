@@ -1,0 +1,82 @@
+CREATE DATABASE pos;
+
+USE pos;
+
+CREATE TABLE branches
+(
+  branch_no INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  description VARCHAR(50)
+);
+
+CREATE TABLE products
+(
+  product_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  description VARCHAR(50) NOT NULL,
+  category INTEGER,
+  sub_cat INTEGER,
+  barcode VARCHAR(20),
+  qty INTEGER,
+  cost DOUBLE,
+  created TIMESTAMP NOT NULL,
+  modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE category
+(
+  cat_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  description VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE sub_category
+(
+  subcat_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  cat_id INTEGER,
+  description VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE sale
+(
+  sale_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  total_cost DOUBLE,
+  sale_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status VARCHAR(2),
+  branch_no INTEGER NOT NULL
+);
+
+CREATE TABLE sales_breakdown
+(
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  sale_id INTEGER NOT NULL,
+  product_id INTEGER NOT NULL
+);
+
+CREATE TABLE tender
+(
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  description VARCHAR(30)
+);
+
+CREATE TABLE tender_sale
+(
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  tender_id INTEGER NOT NULL,
+  sale_id INTEGER NOT NULL,
+  cost DOUBLE,
+  paid DOUBLE,
+  returned DOUBLE
+);
+
+CREATE TABLE employees
+(
+  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(50) NOT NULL,
+  fname VARCHAR(50),
+  surname VARCHAR(50),
+);
+
+CREATE TABLE login
+(
+  username VARCHAR(50) NOT NULL PRIMARY KEY,
+  password VARCHAR(30),
+  branch_no INTEGER
+);
