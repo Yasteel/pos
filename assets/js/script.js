@@ -16,7 +16,7 @@ $(document).ready(function()
 
 // ====================== NAV BUTTONS ======================//
 
-$(document).on('click', '#btn_sale', function()
+$(document).on('click', '#btn_open_sale_menu', function()
 {
 
   if($('.options').hasClass('show'))
@@ -29,7 +29,7 @@ $(document).on('click', '#btn_sale', function()
   }
 });
 
-$(document).on('click', '#btn_products', function()
+$(document).on('click', '#btn_open_products', function()
 {
   if(sales_arr.length > 0)
   {
@@ -62,7 +62,7 @@ $(document).on('click', '#btn_products', function()
   }
 });
 
-$(document).on('click', '#btn_users', function()
+$(document).on('click', '#btn_open_users', function()
 {
   if(access > 2)
   {
@@ -109,10 +109,10 @@ $(document).on('click', '#btn_start_sale', function()
     if(confirm('There is a sale in Progress. Cancel Sale?'))
     {
       sales_arr = [];
-      display_sales();
     }
   }
 
+  display_sales();
   $('.options').removeClass('show');
   $('.sales').addClass('show');
   $('.header > div:not(.message)').css('display', 'none');
