@@ -4,11 +4,15 @@
     <meta charset="utf-8">
     <!-- <link rel="shortcut icon" type="image/png" href="assets/icon/favicon.png"> -->
     <title>pos</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/438c576884.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://kit.fontawesome.com/438c576884.js" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" type="text/css" href="assets/css/presets.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/modals.css">
     <link rel="stylesheet" type="text/css" href="assets/css/table.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <script type="text/javascript" src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="https://urs-traderoute.co.za/assets/library/lib.js"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -22,12 +26,17 @@
           <button id="btn_filter_search"><i class="fas fa-search"></i>Filter Search</button>
           <button id="btn_sales_rep"><i class="fas fa-user-plus"></i>Add Sales Rep</button>
         </div>
+        <div class="sales_btns_filter">
+          <input type="text" id="product_search" placeholder="Search for Product">
+          <select id="category"></select>
+          <select id="subcat"></select>
+          <button id="btn_sales_products_filter"><i class="fas fa-filter"></i> Filter</button>
+          <button id="btn_close_filter"><i class="fas fa-times"></i> Close Filter</button>
+        </div>
         <div class="products_btns">
           <input type="text" id="product_search" placeholder="Search for Product">
           <select id="category"></select>
-          <select id="subcat">
-            <option value="0">Sub-category</option>
-          </select>
+          <select id="subcat"></select>
           <button id="btn_filter"><i class="fas fa-filter"></i> Filter</button>
           <button class="btn_add_product" title="Add Product"><i class="fas fa-plus"></i> Create Product</button>
           <button class="btn_manage_cats" title="Add or Remove Categories/sub-Categories"><i class="fas fa-cogs"></i> Manage Categories</button>
@@ -122,41 +131,69 @@
       </div>
       <div class="modal cats_management">
         <div class="card">
-          <div class="card_header"><h2>Category Management</h2><i class="fas fa-times-circle"></i></div>
+          <div class="card_header">
+            <h2>Category Management</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
           <div class="card_body">
-            <div class="card_kids">
-              <select class="cat" id="del_cat">
-              </select>
-              <button class="delete_cat"><i class="fas fa-trash"></i> Delete</button>
+            <div class="row">
+              <div class="col">
+                <select class="cat" id="del_cat"></select>
+              </div>
+              <div class="col">
+                <button class="delete_cat"><i class="fas fa-trash"></i> Delete</button>
+              </div>
             </div>
-            <div class="card_kids">
-              <select class="cat" id="del_subcat">
-              </select>
-              <button class="delete_subcat"><i class="fas fa-trash"></i> Delete</button>
-            </div>
-            <hr>
-            <div class="card_kids">
-              <input type="text" id="add_cat" placeholder="Category">
-              <button class="add_cat"><i class="fas fa-plus"></i> Add</button>
-            </div>
-            <div class="card_kids">
-              <select class="cat" id="add_subcat_cat">
-              </select>
-              <input type="text" placeholder="Sub-category" id="add_subcat">
-              <button class="add_subcat"><i class="fas fa-plus"></i> Add</button>
+            <div class="row">
+              <div class="col">
+                <select class="cat" id="del_subcat"></select>
+              </div>
+              <div class="col">
+                <button class="delete_subcat"><i class="fas fa-trash"></i> Delete</button>
+              </div>
             </div>
             <hr>
-            <div class="card_kids">
-              <select class="cat" id="mod_cat_cat">
-              </select>
-              <input type="text" placeholder="Category" id="mod_cat">
-              <button class="modify_cat"><i class="fas fa-pen"></i> Modify</button>
+            <div class="row">
+              <div class="col">
+                <input type="text" id="add_cat" placeholder="Category">
+              </div>
+              <div class="col">
+                <button class="add_cat"><i class="fas fa-plus"></i> Add</button>
+              </div>
             </div>
-            <div class="card_kids">
-              <select class="cat" id="mod_subcat">
-              </select>
-              <input type="text" placeholder="Sub-category" id="mod_sub">
-              <button class="modify_subcat"><i class="fas fa-pen"></i> Modify</button>
+            <div class="row">
+              <div class="col">
+                <select class="cat" id="add_subcat_cat"></select>
+              </div>
+              <div class="col">
+                <input type="text" placeholder="Sub-category" id="add_subcat">
+              </div>
+              <div class="col">
+                <button class="add_subcat"><i class="fas fa-plus"></i> Add</button>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col">
+                <select class="cat" id="mod_cat_cat"></select>
+              </div>
+              <div class="col">
+                <input type="text" placeholder="Category" id="mod_cat">
+              </div>
+              <div class="col">
+                <button class="modify_cat"><i class="fas fa-pen"></i> Modify</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <select class="cat" id="mod_subcat"></select>
+              </div>
+              <div class="col">
+                <input type="text" placeholder="Sub-category" id="mod_sub">
+              </div>
+              <div class="col">
+                <button class="modify_subcat"><i class="fas fa-pen"></i> Modify</button>
+              </div>
             </div>
           </div>
         </div>
@@ -168,29 +205,37 @@
             <i class="fas fa-times-circle"></i>
           </div>
           <div class="card_body">
-            <div class="card_kids">
-              <input type="text" class="description" id="description" placeholder="Description">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="description" id="description" placeholder="Description">
+              </div>
             </div>
-            <div class="card_kids">
-              <select name="" id="add_product_cat" class="cat">
-                <option value="0">Choose Category</option>
-                <option value=""></option>
-                <option value=""></option>
-              </select>
+            <div class="row">
+              <div class="col">
+                <select name="" id="add_product_cat" class="cat"></select>
+              </div>
             </div>
-            <div class="card_kids">
-              <select name="" id="add_product_subcat" class="subcat">
-                <option value="">Choose Sub-category</option>
-              </select>
+            <div class="row">
+              <div class="col">
+                <select name="" id="add_product_subcat" class="subcat">
+                  <option value="">Choose Sub-category</option>
+                </select>
+              </div>
             </div>
-            <div class="card_kids">
-              <input type="text" class="cost" id="cost" placeholder="Cost">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="cost" id="cost" placeholder="Cost">
+              </div>
             </div>
-            <div class="card_kids">
-              <input type="text" class="qty" id="qty" placeholder="Qty">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="qty" id="qty" placeholder="Qty">
+              </div>
             </div>
-            <div class="card_kids">
-              <button class="add_product"><i class="fas fa-plus"></i> Create Product</button>
+            <div class="row">
+              <div class="col">
+                <button class="add_product"><i class="fas fa-plus"></i> Create Product</button>
+              </div>
             </div>
           </div>
         </div>
@@ -202,29 +247,35 @@
             <i class="fas fa-times-circle"></i>
           </div>
           <div class="card_body">
-            <div class="card_kids">
-              <input type="text" class="description" id="description" placeholder="Description">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="description" id="description" placeholder="Description">
+              </div>
             </div>
-            <div class="card_kids">
-              <select name="" id="add_product_cat" class="cat">
-                <option value="0">Choose Category</option>
-                <option value=""></option>
-                <option value=""></option>
-              </select>
+            <div class="row">
+              <div class="col">
+                <select name="" id="add_product_cat" class="cat"></select>
+              </div>
             </div>
-            <div class="card_kids">
-              <select name="" id="add_product_subcat" class="subcat">
-                <option value="">Choose Sub-category</option>
-              </select>
+            <div class="row">
+              <div class="col">
+                <select name="" id="add_product_subcat" class="subcat"></select>
+              </div>
             </div>
-            <div class="card_kids">
-              <input type="text" class="cost" id="cost" placeholder="Cost">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="cost" id="cost" placeholder="Cost">
+              </div>
             </div>
-            <div class="card_kids">
-              <input type="text" class="qty" id="qty" placeholder="Qty">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="qty" id="qty" placeholder="Qty">
+              </div>
             </div>
-            <div class="card_kids">
-              <button class="modify_product"><i class="fas fa-pen"></i> Modify Product</button>
+            <div class="row">
+              <div class="col">
+                <button class="modify_product"><i class="fas fa-pen"></i> Modify Product</button>
+              </div>
             </div>
           </div>
         </div>
@@ -234,23 +285,31 @@
           <div class="card_header">
             <h2>Checkout</h2>
           </div>
-          <div class="card_bodys">
+          <div class="card_body">
             <div class="row">
-              <input type="text" id="cost" disabled>
+              <div class="col">
+                <input type="text" id="cost" disabled>
+              </div>
             </div>
             <div class="row">
-              <select id="tender">
-                <option value="0">Select Tender</option>
-              </select>
+              <div class="col">
+                <select id="tender"></select>
+              </div>
             </div>
             <div class="row">
-              <input type="text" id="amount" placeholder="Enter Amount">
+              <div class="col">
+                <input type="text" id="amount" placeholder="Enter Amount">
+              </div>
             </div>
             <div class="row">
-              <button id="btn_back"><i class="fas fa-arrow-left"></i>Back</button>
+              <div class="col">
+                <button id="btn_back"><i class="fas fa-arrow-left"></i>Back</button>
+              </div>
             </div>
             <div class="row">
-              <button id="btn_proceed"><i class="fas fa-money-bill-alt"></i>Proceed</button>
+              <div class="col">
+                <button id="btn_proceed"><i class="fas fa-money-bill-alt"></i>Proceed</button>
+              </div>
             </div>
           </div>
         </div>
@@ -262,13 +321,41 @@
             <i class="fas fa-times-circle"></i>
           </div>
           <div class="card_body">
-            <input type="text" id="username" placeholder="Username">
-            <input type="text" id="password" placeholder="Password">
-            <input type="text" id="user_name" placeholder="Name">
-            <input type="text" id="user_surname" placeholder="Surname">
-            <select id="branches"><option value="0">Choose Branch</option></select>
-            <select id="role"><option value="0">Choose Role</option></select>
-            <button id="btn_add_user"><i class="fas fa-user-plus"></i> Add User</button>
+            <div class="row">
+              <div class="col">
+                <input type="text" id="username" placeholder="Username">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <input type="text" id="password" placeholder="Password">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <input type="text" id="user_name" placeholder="Name">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <input type="text" id="user_surname" placeholder="Surname">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <select id="branches"><option value="0">Choose Branch</option></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <select id="role"><option value="0">Choose Role</option></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button id="btn_add_user"><i class="fas fa-user-plus"></i> Add User</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -309,6 +396,15 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="modal filtered_products">
+        <div class="card">
+          <div class="card_header">
+            <h2>Search For Product</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card_body"></div>
         </div>
       </div>
     </div>

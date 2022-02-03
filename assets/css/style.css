@@ -222,10 +222,7 @@
 {
 	color: var(--l_blue);
 }
-/* Sales - Totals */
-/* =========================Styles for Sales section========================= */
 
-/* =========================Styles for Products========================= */
 .products
 {
 	display: none;
@@ -233,14 +230,15 @@
 	height: 100%;
 }
 
-/* =========================Styles for Products========================= */
-
 .show
 {
 	display: flex !important;
 }
 
-/* =========================Modals - Create Product========================= */
+.users {display: none;}
+
+/* ===================== Global Modal Styles ===================== */
+
 .modal
 {
 	width: 100vw;
@@ -257,8 +255,6 @@
 
 .modal .card
 {
-	min-width: 40vw;
-	min-height: 400px;
 	border-radius: var(--radius_d);
 	display: flex;
 	flex-direction: column;
@@ -266,24 +262,16 @@
 	background: var(--l_white);
 }
 
-.modal.product_add .card ,
-.modal.product_edit .card
-{height: 450px;}
-
-.modal .card > div
-{
-	width: 100%;
-}
-
 .modal .card .card_header
 {
+  width: 100%;
+  height: 50px;
+  padding: 0 1rem;
 	border-top-left-radius: var(--radius_d);
 	border-top-right-radius: var(--radius_d);
-	padding: 0 1rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 50px;
 	background: var(--l_black);
 	color: var(--l_white);
 }
@@ -301,62 +289,51 @@
 
 .modal .card .card_body
 {
-	padding: 1rem;
 	width: 100%;
-	height: calc(100% - 50px);
+  padding: 1.5rem 1rem;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 	gap: 1rem;
 }
 
-.modal .card .card_body .card_kids
+.modal .card .card_body .row
 {
-	width: 100%;
-	height: 45px;
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	gap: 1rem;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  gap: 1rem;
 }
 
-.modal .card .card_body .card_kids > *
+.modal .card .card_body .row .col
 {
-	height: 45px;
-	background: none;
-	border: 1px solid var(--l_black);
-	border-radius: var(--radius_m);
-	transition: border 300ms ease-in-out;
+  height: 100%;
 }
 
-.modal .card .card_body .card_kids button
+.modal .card .card_body .row .col :is(button, input, select)
 {
-	min-width: 100px;
-	padding: 0 1rem;
-	cursor: pointer;
+  height: 100%;
+  background: none;
+  border-radius: var(--radius_m);
+  border: 1px solid var(--l_black);
+  padding: 0 .6rem;
+  width: 100%;
+  transition: border var(--transition);
+}
+.modal .card .card_body .row .col :is(button i)
+{
+  margin-right: .6rem;
+  transition: color var(--transition);
 }
 
-.modal .card .card_body .card_kids button i
+.modal .card .card_body .row .col :is(button:hover, select:hover)
 {
-	margin-right: .6rem;
-	transition: color 300ms ease-in-out;
+  border: 2px solid var(--l_blue);
+  cursor: pointer;
 }
 
-.modal .card .card_body .card_kids button:hover
+.modal .card .card_body .row .col :is(button:hover i)
 {
-	border-color: var(--l_blue);
-	border-width: 2px;
-}
-
-.modal .card .card_body .card_kids button:hover i
-{
-	color: var(--l_blue);
-}
-
-.modal .card .card_body .card_kids :is(select,input)
-{
-	padding: 0 .6rem;
+  color: var(--l_blue);
 }
 
 .modal .card .card_body hr
@@ -366,132 +343,104 @@
 	background: var(--l_black);
 }
 
-.modal.product_add .card .card_body .card_kids ,
-.modal.product_edit .card .card_body .card_kids
-{ justify-content: flex-start;}
+/* ===================== Global Modal Styles ===================== */
 
-.modal.product_add .description ,
-.modal.product_edit .description
-{ width: 100%; }
-
-.modal.product_add select ,
-.modal.product_edit select
-{ width: 70%; }
-
-.modal.product_add .qty ,
-.modal.product_edit .qty
-{ width: 100px; }
-
-
-/* =============================== */
-
-.modal.checkout .card
+/* ===================== Indiviual Modal Styles ===================== */
+.modal.cats_management .card
 {
-	width: 300px;
-	height: 300px;
+  width: 650px;
+  height: auto;
 }
 
-.modal.checkout .card .card_header
+.modal.cats_management .card .col:last-child
 {
-	width: 100%;
-	height: 50px;
+  width: 100px;
 }
 
-.modal.checkout .card .card_bodys
+.modal.product_add .card,
+.modal.product_edit .card,
+.modal.checkout .card,
+.modal.user_add .card,
+.modal.user_edit .card
 {
-	height: calc(100% - 50px);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 1rem;
+  width: 500px;
+  height: auto;
 }
 
-.modal.checkout .card .card_bodys .row
+.modal.product_add .card .col,
+.modal.product_edit .card .col,
+.modal.checkout .card .col,
+.modal.user_add .card .col
 {
-	width: 100%;
-	height: 50px;
-	display: flex;
-	padding: 0 2rem;
-}
-
-.modal.checkout .card .card_bodys .row > *
-{
-	flex-grow: 1;
-	padding: 0 1.5rem;
-	background: none;
-	border: 1px solid var(--l_black);
-	border-radius: var(--radius_m);
-	transition: border var(--transition);
-}
-
-.modal.checkout .card .card_bodys .row :is(input#cost, input#outstanding)
-{
-	border: none;
-	font-size: 16px;
-}
-
-.modal.checkout .card .card_bodys .row :is(button, select):hover
-{
-	border: 2px solid var(--l_blue);
-	cursor: pointer;
-}
-
-.modal.checkout .card .card_bodys .row > button i
-{
-	margin-right: 1rem;
-	transition: color var(--transition);
-}
-
-.modal.checkout .card .card_bodys .row > button:hover i
-{
-	color: var(--l_blue);
-}
-
-.users {display: none;}
-
-.modal.user_add .card
-{
-	height: 300px;
-	min-width: 500px;
-}
-
-.modal.user_add .card .card_body
-{
-	height: calc(100% - 50px);
-	display: flex;
-	justify-content: center;
-}
-
-.modal.user_add .card .card_body > *
-{
-	width: 100%;
-	height: 50px;
-	background: none;
-	border: 1px solid var(--l_black);
-	border-radius: var(--radius_m);
-	padding: 0 1rem;
-	transition: border var(--transition);
-}
-
-.modal.user_add .card .card_body > *:focus,
-.modal.user_add .card .card_body button:focus,
-.modal.user_add .card .card_body button:hover
-{
-	border: 2px solid var(--l_blue);
-}
-
-.modal.user_add .card .card_body button { cursor: pointer; }
-
-.modal.user_add .card .card_body button i
-{
-	transition: color var(--transition);
-}
-
-.modal.user_add .card .card_body button:hover i
-{
-	color: var(--l_blue);
+  width: 100%;
 }
 
 
 
-/* =============================== */
+/* NEED TO BE CHANGED */
+
+.modal.filtered_products
+{
+	overflow-y: auto;
+}
+
+.modal.filtered_products .card
+{
+	width: 500px;
+	height: 500px;
+}
+
+.modal.filtered_products .card .card_body
+{
+	height: 450px;
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+.modal.filtered_products .card .card_body .row
+{
+	height: 50px !important;
+}
+
+.modal.filtered_products .card .card_body .row .col:first-child
+{
+	width: 70%;
+}
+
+.modal.filtered_products .card .card_body .row .col:last-child
+{
+	width: 30%;
+	/* NEED TO BE CHANGED */
+}
+
+
+
+
+.modal.user_edit .card .row:not(.row:last-child) .col:first-child
+{
+  width: 30%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.modal.user_edit .card .row:not(.row:last-child) .col:last-child
+{
+  width: 70%;
+}
+
+.modal.user_edit .card .row:last-child .col
+{
+  width: 100%;
+}
+
+.modal.cats_management .card .card_body .row
+{
+  justify-content: flex-end;
+}
+.modal.product_add .card .card_body .row,
+.modal.product_edit .card .card_body .row
+{
+  justify-content: flex-start;
+}
+/* ===================== Indiviual Modal Styles ===================== */

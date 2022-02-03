@@ -7,11 +7,18 @@ var number_only = /^-?\d*\.?\d*$/;
 
 $(document).ready(function()
 {
-  let ud = JSON.parse(sessionStorage.getItem('user_data'));
-  username = ud.username;
-  bno = ud.bno;
-  access = ud.access_level;
-  $('.header .message h2 span').text(username);
+  if(sessionStorage.getItem('user_data') == null)
+  {
+    document.location.href = "index.html";
+  }
+  else
+  {
+    let ud = JSON.parse(sessionStorage.getItem('user_data'));
+    username = ud.username;
+    bno = ud.bno;
+    access = ud.access_level;
+    $('.header .message h2 span').text(username);
+  }
 });
 
 // ====================== NAV BUTTONS ======================//
@@ -183,6 +190,40 @@ $(document).on('click', '#btn_product_search', function()
 
 });
 
+$(document).on('click', '#btn_filter_search', function()
+{
+  $('.sales_btns').css('display', 'none');
+  fetch_cats('.sales_btns_filter #category');
+  fetch_subcats('.sales_btns_filter #subcat');
+  $('.sales_btns_filter').css('display', 'flex');
+});
+
+$(document).on('click', '#btn_close_filter', function()
+{
+  $('.sales_btns').css('display', 'flex');
+  $('.sales_btns_filter').css('display', 'none');
+});
+
+$(document).on('click', '#btn_sales_products_filter', function()
+{
+  let search = $('.sales_btns_filter input#product_search').val();
+  let cat_id = $('.sales_btns_filter select#category').val();
+  let subcat_id = $('.sales_btns_filter select#subcat').val();
+  fetch_products(search, cat_id, subcat_id, display_filtered_products);
+
+});
+
+$(document).on('click', '.btn_select_product', function()
+{
+  let row_data = JSON.parse(atob($(this).closest('.row').data('obj')));
+  delete row_data.category;
+  delete row_data.sub_cat;
+  delete row_data.modified;
+  build_sales_obj(row_data);
+  display_sales();
+  $('.modal.filtered_products').css('display', 'none');
+});
+
 // ====================== SALES OPERATIONS ======================//
 $(document).on('click', '#btn_checkout', function()
 {
@@ -240,45 +281,7 @@ $(document).on('click', '#btn_filter', function()
   let search = $('.products_btns input#product_search').val();
   let cat_id = $('.products_btns select#category').val();
   let subcat_id = $('.products_btns select#subcat').val();
-
-  $.post('assets/php/index.php',
-  {
-    'operation': 'filter_products',
-    'search': search.trim() == '' ? 'Null' : search,
-    'cat_id': cat_id == '0' ? 'Null' : cat_id,
-    'subcat_id': subcat_id == '0' ? 'Null' : subcat_id
-  },
-  function(response)
-  {
-    if(response == 0)
-    {
-      showAlert('No Products Found', 2);
-    }
-    else
-    {
-      let products = JSON.parse(response);
-      $('.products .items table tbody').html('');
-      products.forEach((product) =>
-      {
-        let date = new Date(product.modified);
-
-        $('.products .items table tbody').append(
-          `
-          <tr>
-            <td>${product.product_id}</td>
-            <td>${product.description}</td>
-            <td>R${product.cost}</td>
-            <td>${product.qty}</td>
-            <td>${product.barcode}</td>
-            <td>${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}</td>
-            <td data-product-id="${product.product_id}" id="btn_edit_product" title="Edit Product"><i class="fas fa-pen"></i></td>
-            <td data-product-id="${product.product_id}" id="btn_delete_product" title="Delete Product"><i class="fas fa-times-circle"></i></td>
-          </tr>
-          `);
-      });
-
-    }
-  });
+  fetch_products(search, cat_id, subcat_id, display_products);
 });
 
 $(document).on('click', '.btn_manage_cats', function()
@@ -974,6 +977,111 @@ function fetch_branches(elem)
   });
 }
 
+function fetch_cats(elem)
+{
+  $.post('assets/php/index.php',
+  {
+    'operation': 'fetch_cats'
+  },
+  function(response)
+  {
+    if(response == 0)
+    {
+      $(elem).html(`<option value="0"> --No Categories Listed--</option>`);
+    }
+    else
+    {
+      $(elem).html('<option value="0"> Choose Category</option>');
+      let cats = JSON.parse(response);
+      cats.forEach(cat =>
+      {
+        $(elem).append(`<option value="${cat.cat_id}">${cat.description}</option>`)
+      });
+    }
+  });
+}
+
+function fetch_subcats(elem, cat)
+{
+  cat = cat ? cat : 'Null';
+
+  $.post('assets/php/index.php',
+  {
+    'operation': 'fetch_subcats',
+    'cat': cat
+  },
+  function(response)
+  {
+    if(response == 0)
+    {
+      $(elem).html(`<option value="0"> No sub-categories</option>`);
+    }
+    else
+    {
+      $(elem).html('<option value="0"> Choose sub-category</option>');
+      let subcats = JSON.parse(response);
+      subcats.forEach(subcat =>
+      {
+        $(elem).append(`<option value="${subcat.subcat_id}">${subcat.description}</option>`)
+      });
+    }
+  });
+}
+
+function fetch_products(search, cat_id, subcat_id, callback)
+{
+  $.post('assets/php/index.php',
+  {
+    'operation': 'filter_products',
+    'search': search.trim() == '' ? 'Null' : search,
+    'cat_id': cat_id == '0' ? 'Null' : cat_id,
+    'subcat_id': subcat_id == '0' ? 'Null' : subcat_id
+  },
+  function(response)
+  {
+    if(response == 0)
+    {
+      showAlert('No Products Found', 2);
+    }
+    else
+    {
+      let products = JSON.parse(response);
+      callback(products);
+    }
+  });
+}
+
+function fetch_product_info(id)
+{
+  $.post('assets/php/index.php',
+  {
+    'operation': 'fetch_product_info',
+    'product_id': id
+  },
+  function(response)
+  {
+    if(response == 0)
+    {
+      showAlert('Something Went Wrong', 2);
+    }
+    else
+    {
+      let product = JSON.parse(response);
+      fetch_cats('.product_edit select#add_product_cat');
+      fetch_subcats('.product_edit select#add_product_subcat', product[0].category);
+
+      $('.product_edit input#description').val(product[0].description);
+      $('.product_edit select#add_product_cat').val(`'${product[0].category}'`);
+      $('.product_edit select#add_product_subcat').val(`'${product[0].sub_cat}'`);
+      $('.product_edit input#cost').val(product[0].cost);
+      $('.product_edit input#qty').val(product[0].qty);
+      $('.product_edit button.modify_product').data('id', id);
+      $('.modal.product_edit').css('display', 'flex');
+      console.log(product[0]);
+    }
+  });
+}
+
 function fetch_roles(elem)
 {
   $.post('assets/php/index.php',
@@ -994,6 +1102,37 @@ function fetch_roles(elem)
     });
 
   });
+}
+
+function fetch_tenders(elem)
+{
+
+  $.post('assets/php/index.php',
+  {
+    'operation': 'fetch_tenders'
+  },
+  function(response)
+  {
+    if(response == 0)
+    {
+      console.log(response);
+    }
+    else
+    {
+      $(elem).html('<option value="0">Select Tender</option>');
+
+      let tenders = JSON.parse(response);
+      tenders.forEach(tender =>
+      {
+        $(elem).append(
+          `
+            <option value="${tender.id}">${tender.description}</option>
+          `);
+      });
+    }
+  });
+
+  return tender;
 }
 
 function fetch_users()
@@ -1232,119 +1371,6 @@ function modify_product(product_id)
   }
 }
 
-function fetch_cats(elem)
-{
-  $.post('assets/php/index.php',
-  {
-    'operation': 'fetch_cats'
-  },
-  function(response)
-  {
-    if(response == 0)
-    {
-      $(elem).html(`<option value="0"> --No Categories Listed--</option>`);
-    }
-    else
-    {
-      $(elem).html('<option value="0"> Choose Category</option>');
-      let cats = JSON.parse(response);
-      cats.forEach(cat =>
-      {
-        $(elem).append(`<option value="${cat.cat_id}">${cat.description}</option>`)
-      });
-    }
-  });
-}
-
-function fetch_subcats(elem, cat)
-{
-  cat = cat ? cat : 'Null';
-
-  $.post('assets/php/index.php',
-  {
-    'operation': 'fetch_subcats',
-    'cat': cat
-  },
-  function(response)
-  {
-    if(response == 0)
-    {
-      $(elem).html(`<option value="0"> No sub-categories</option>`);
-    }
-    else
-    {
-      $(elem).html('<option value="0"> Choose sub-category</option>');
-      let subcats = JSON.parse(response);
-      subcats.forEach(subcat =>
-      {
-        $(elem).append(`<option value="${subcat.subcat_id}">${subcat.description}</option>`)
-      });
-    }
-  });
-}
-
-function fetch_product_info(id)
-{
-  $.post('assets/php/index.php',
-  {
-    'operation': 'fetch_product_info',
-    'product_id': id
-  },
-  function(response)
-  {
-    if(response == 0)
-    {
-      showAlert('Something Went Wrong', 2);
-    }
-    else
-    {
-      let product = JSON.parse(response);
-      fetch_cats('.product_edit select#add_product_cat');
-      fetch_subcats('.product_edit select#add_product_subcat', product[0].category);
-
-      $('.product_edit input#description').val(product[0].description);
-      $('.product_edit select#add_product_cat').val(`'${product[0].category}'`);
-      $('.product_edit select#add_product_subcat').val(`'${product[0].sub_cat}'`);
-      $('.product_edit input#cost').val(product[0].cost);
-      $('.product_edit input#qty').val(product[0].qty);
-      $('.product_edit button.modify_product').data('id', id);
-      $('.modal.product_edit').css('display', 'flex');
-      console.log(product[0]);
-    }
-  });
-}
-
-function fetch_tenders(elem)
-{
-
-  $.post('assets/php/index.php',
-  {
-    'operation': 'fetch_tenders'
-  },
-  function(response)
-  {
-    if(response == 0)
-    {
-      console.log(response);
-    }
-    else
-    {
-      $(elem).html('<option value="0">Select Tender</option>');
-
-      let tenders = JSON.parse(response);
-      tenders.forEach(tender =>
-      {
-        $(elem).append(
-          `
-            <option value="${tender.id}">${tender.description}</option>
-          `);
-      });
-    }
-  });
-
-  return tender;
-}
-
 function add_err(elm)
 {
   $(elm).addClass('err');
@@ -1424,6 +1450,46 @@ function display_sales()
   });
 
   $('.sales .operations .total p span').html(total);
+}
+
+function display_products(products)
+{
+  $('.products .items table tbody').html('');
+  products.forEach((product) =>
+  {
+    let date = new Date(product.modified);
+
+    $('.products .items table tbody').append(
+      `
+      <tr>
+        <td>${product.product_id}</td>
+        <td>${product.description}</td>
+        <td>R${product.cost}</td>
+        <td>${product.qty}</td>
+        <td>${product.barcode}</td>
+        <td>${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}</td>
+        <td data-product-id="${product.product_id}" id="btn_edit_product" title="Edit Product"><i class="fas fa-pen"></i></td>
+        <td data-product-id="${product.product_id}" id="btn_delete_product" title="Delete Product"><i class="fas fa-times-circle"></i></td>
+      </tr>
+      `);
+  });
+}
+
+function display_filtered_products(products)
+{
+  $('.modal.filtered_products .card_body').html('');
+  products.forEach(item =>
+  {
+    $('.modal.filtered_products .card_body').append(
+      `
+      <div class="row" data-obj="${btoa(JSON.stringify(item))}">
+        <div class="col"><p>${item.description}</p></div>
+        <div class="col"><button class="btn_select_product">Select Product</button></div>
+      </div>
+      `);
+  });
+  $('.modal.filtered_products').css('display', 'flex');
+
 }
 
 function load_checkout()
