@@ -241,6 +241,32 @@
     }
   }
 
+  if($_REQUEST['operation'] == 'delete_user')
+  {
+    $id = $_REQUEST['id'];
+
+    $sql = "DELETE FROM login WHERE username = (SELECT username FROM employees WHERE id='$id');";
+
+    if(mysqli_query($conn, $sql))
+    {
+      $sql = "DELETE FROM employees WHERE id='$id';";
+
+      if(mysqli_query($conn, $sql))
+      {
+        echo '2';
+      }
+      else
+      {
+        echo '1';
+      }
+    }
+    else
+    {
+      echo '0';
+    }
+
+  }
+
   if($_REQUEST['operation'] == 'fetch_branches')
   {
     $sql = "SELECT * FROM branches";
@@ -702,32 +728,6 @@
     if(mysqli_query($conn, $sql))
     {
       $sql = "UPDATE login SET password='$password', branch_no='$branch' WHERE username = (SELECT username FROM employees WHERE id='$id')";
-
-      if(mysqli_query($conn, $sql))
-      {
-        echo '2';
-      }
-      else
-      {
-        echo '1';
-      }
-    }
-    else
-    {
-      echo '0';
-    }
-
-  }
-
-  if($_REQUEST['operation'] == 'delete_user')
-  {
-    $id = $_REQUEST['id'];
-
-    $sql = "DELETE FROM login WHERE username = (SELECT username FROM employees WHERE id='$id');";
-
-    if(mysqli_query($conn, $sql))
-    {
-      $sql = "DELETE FROM employees WHERE id='$id';";
 
       if(mysqli_query($conn, $sql))
       {
