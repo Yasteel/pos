@@ -120,7 +120,7 @@ $(document).on('click', '#btn_start_sale', function()
   }
 
   display_sales();
-  $('.options').removeClass('show');
+  $('.show').removeClass('show');
   $('.sales').addClass('show');
   $('.header > div:not(.message)').css('display', 'none');
   $('.sales_btns').css('display', 'flex');
@@ -643,6 +643,15 @@ function add_cat()
   }
 }
 
+function add_err(elm)
+{
+  $(elm).addClass('err');
+  setTimeout(function()
+  {
+    $(elm).removeClass('err');
+  },3000);
+}
+
 function add_subcat()
 {
   let cat = $('select#add_subcat_cat').val();
@@ -854,6 +863,203 @@ function add_user()
 
 }
 
+function build_sales_obj(product_info)
+{
+  if(sales_arr.length < 1)
+  {
+    product_info.sale_qty = 1;
+
+    if(product_info.qty - product_info.sale_qty >= 0)
+    {
+      sales_arr.push(product_info);
+    }
+    else
+    {
+      showAlert('Insuffiecient Stock', 2);
+    }
+  }
+  else
+  {
+    let sale_idx = sales_arr.findIndex(index => index.product_id == product_info.product_id);
+
+    if(sale_idx >= 0)
+    {
+      if(sales_arr[sale_idx].qty - sales_arr[sale_idx].sale_qty - 1 >= 0)
+      {
+        sales_arr[sale_idx].sale_qty = sales_arr[sale_idx].sale_qty + 1;
+      }
+      else
+      {
+        showAlert('Insuffiecient Stock', 2);
+      }
+    }
+    else
+    {
+      product_info.sale_qty = 1;
+
+      if(product_info.qty - product_info.sale_qty >= 0)
+      {
+        sales_arr.push(product_info);
+      }
+      else
+      {
+        showAlert('Insuffiecient Stock', 2);
+      }
+    }
+  }
+
+}
+
+function checkout()
+{
+  if($('select#tender').val() == 0)
+  {
+    showAlert('Select Tender', 2);
+    add_err('select#tender');
+  }
+  else
+  {
+    let amount = $('input#amount').val();
+
+    if(!number_only.test(amount) || amount.trim() == '')
+    {
+      showAlert('Enter a Valid Amount', 2);
+      add_err('input#amount');
+    }
+    else
+    {
+      amount = parseFloat(amount);
+      let tender_id = $('select#tender').val();
+
+      if(tender_arr.length == 0)
+      {
+        let tender_onj =
+        {
+          'tender_id': tender_id,
+          'cost': total,
+          'paid': amount,
+          'returned': amount <= total ? 0 : (amount-total)
+        };
+        tender_arr.push(tender_onj);
+      }
+      else
+      {
+        let tender_idx = tender_arr.findIndex(index => index.tender_id == tender_id);
+
+        if(tender_idx < 0)
+        {
+          let tender_onj =
+          {
+            'tender_id': tender_id,
+            'cost': total,
+            'paid': amount,
+            'returned': amount <= total ? 0 : (amount-total)
+          };
+          tender_arr.push(tender_onj);
+        }
+        else
+        {
+          tender_arr[tender_idx].paid += amount;
+          tender_arr[tender_idx].returned = amount <= total ? 0 : (amount-total);
+        }
+      }
+
+      if(total > amount)
+      {
+        total = total - amount;
+      }
+      else
+      {
+        total = 0;
+        complete_checkout();
+      }
+      $('input#cost').val(`Total: R${total}`);
+      $('input#amount').val('')
+    }
+  }
+}
+
+function clear_fields(inputs)
+{
+  inputs.forEach(input =>
+  {
+    if(input.includes('select'))
+    {
+      $(input).val('0');
+    }
+    else
+    {
+      $(input).val('');
+    }
+  });
+}
+
+function complete_checkout()
+{
+  $('.modal.checkout').css('display', 'none');
+  total = 0;
+
+  sales_arr.forEach(line =>
+  {
+    total += line.sale_qty * line.cost;
+  });
+
+  $.post('assets/php/index.php',
+  {
+    'operation': 'insert_sale',
+    'total_cost': total,
+    'status': 'c',
+    'bno': bno
+  },
+  function(response)
+  {
+    if(response == 'sum ting wong')
+    {
+      showAlert(response, 2);
+      console.log(response);
+    }
+    else
+    {
+      showAlert('Shit Worked', 1);
+
+      let product_info = [];
+
+      sales_arr.forEach((line) =>
+      {
+        product_info.push(
+          {
+            'id': line.product_id,
+            'qty': line.qty - line.sale_qty
+          });
+      });
+
+      $.post('assets/php/index.php',
+      {
+        'operation': 'complete_sale',
+        'sale_id': response,
+        'product_info': JSON.stringify(product_info),
+        'tenders': JSON.stringify(tender_arr)
+      },
+      function(response)
+      {
+        if(response == '2')
+        {
+          showAlert("Sale Completed", 1);
+          sales_arr = [];
+          tender_arr = [];
+          $('.sales .items table tbody').html('');
+          $('.sales .operations .total p span').html('0');
+
+        }
+        else
+        {
+          console.log(`Sum Ting Wong - ${response}`, 2);
+        }
+      });
+    }
+  });
+}
+
 function delete_cat()
 {
   let cat_id = $('select#del_cat').val();
@@ -946,6 +1152,71 @@ function delete_product(product_id)
       }
     });
   }
+}
+
+function display_filtered_products(products)
+{
+  $('.modal.filtered_products .card_body').html('');
+  products.forEach(item =>
+  {
+    $('.modal.filtered_products .card_body').append(
+      `
+      <div class="row" data-obj="${btoa(JSON.stringify(item))}">
+        <div class="col"><p>${item.description}</p></div>
+        <div class="col"><button class="btn_select_product">Select Product</button></div>
+      </div>
+      `);
+  });
+  $('.modal.filtered_products').css('display', 'flex');
+
+}
+
+function display_products(products)
+{
+  $('.products .items table tbody').html('');
+  products.forEach((product) =>
+  {
+    let date = new Date(product.modified);
+
+    $('.products .items table tbody').append(
+      `
+      <tr>
+        <td>${product.product_id}</td>
+        <td>${product.description}</td>
+        <td>R${product.cost}</td>
+        <td>${product.qty}</td>
+        <td>${product.barcode}</td>
+        <td>${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}</td>
+        <td data-product-id="${product.product_id}" id="btn_edit_product" title="Edit Product"><i class="fas fa-pen"></i></td>
+        <td data-product-id="${product.product_id}" id="btn_delete_product" title="Delete Product"><i class="fas fa-times-circle"></i></td>
+      </tr>
+      `);
+  });
+}
+
+function display_sales()
+{
+  let total = 0;
+  $('.sales .items table tbody').html('');
+  sales_arr.forEach((line, idx) =>
+  {
+    total += line.sale_qty * line.cost;
+    $('.sales .items table tbody').append(
+      `
+        <tr data-sale-idx="${idx}">
+          <td>${line.description}</td>
+          <td>${line.sale_qty} @</td>
+          <td>${line.cost}</td>
+          <td>${line.sale_qty * line.cost}</td>
+          <td title="Increase Quantity"><i class="fas fa-plus"></i></td>
+          <td title="Reduce Quantity"><i class="fas fa-minus"></i></td>
+          <td title="Delete Line"><i class="fas fa-times-circle"></i></td>
+          </td>
+        </tr>
+      `);
+  });
+
+  $('.sales .operations .total p span').html(total);
 }
 
 function fetch_branches(elem)
@@ -1371,127 +1642,6 @@ function modify_product(product_id)
   }
 }
 
-function add_err(elm)
-{
-  $(elm).addClass('err');
-  setTimeout(function()
-  {
-    $(elm).removeClass('err');
-  },3000);
-}
-
-function build_sales_obj(product_info)
-{
-  if(sales_arr.length < 1)
-  {
-    product_info.sale_qty = 1;
-
-    if(product_info.qty - product_info.sale_qty >= 0)
-    {
-      sales_arr.push(product_info);
-    }
-    else
-    {
-      showAlert('Insuffiecient Stock', 2);
-    }
-  }
-  else
-  {
-    let sale_idx = sales_arr.findIndex(index => index.product_id == product_info.product_id);
-
-    if(sale_idx >= 0)
-    {
-      if(sales_arr[sale_idx].qty - sales_arr[sale_idx].sale_qty - 1 >= 0)
-      {
-        sales_arr[sale_idx].sale_qty = sales_arr[sale_idx].sale_qty + 1;
-      }
-      else
-      {
-        showAlert('Insuffiecient Stock', 2);
-      }
-    }
-    else
-    {
-      product_info.sale_qty = 1;
-
-      if(product_info.qty - product_info.sale_qty >= 0)
-      {
-        sales_arr.push(product_info);
-      }
-      else
-      {
-        showAlert('Insuffiecient Stock', 2);
-      }
-    }
-  }
-
-}
-
-function display_sales()
-{
-  let total = 0;
-  $('.sales .items table tbody').html('');
-  sales_arr.forEach((line, idx) =>
-  {
-    total += line.sale_qty * line.cost;
-    $('.sales .items table tbody').append(
-      `
-        <tr data-sale-idx="${idx}">
-          <td>${line.description}</td>
-          <td>${line.sale_qty} @</td>
-          <td>${line.cost}</td>
-          <td>${line.sale_qty * line.cost}</td>
-          <td title="Increase Quantity"><i class="fas fa-plus"></i></td>
-          <td title="Reduce Quantity"><i class="fas fa-minus"></i></td>
-          <td title="Delete Line"><i class="fas fa-times-circle"></i></td>
-          </td>
-        </tr>
-      `);
-  });
-
-  $('.sales .operations .total p span').html(total);
-}
-
-function display_products(products)
-{
-  $('.products .items table tbody').html('');
-  products.forEach((product) =>
-  {
-    let date = new Date(product.modified);
-
-    $('.products .items table tbody').append(
-      `
-      <tr>
-        <td>${product.product_id}</td>
-        <td>${product.description}</td>
-        <td>R${product.cost}</td>
-        <td>${product.qty}</td>
-        <td>${product.barcode}</td>
-        <td>${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}</td>
-        <td data-product-id="${product.product_id}" id="btn_edit_product" title="Edit Product"><i class="fas fa-pen"></i></td>
-        <td data-product-id="${product.product_id}" id="btn_delete_product" title="Delete Product"><i class="fas fa-times-circle"></i></td>
-      </tr>
-      `);
-  });
-}
-
-function display_filtered_products(products)
-{
-  $('.modal.filtered_products .card_body').html('');
-  products.forEach(item =>
-  {
-    $('.modal.filtered_products .card_body').append(
-      `
-      <div class="row" data-obj="${btoa(JSON.stringify(item))}">
-        <div class="col"><p>${item.description}</p></div>
-        <div class="col"><button class="btn_select_product">Select Product</button></div>
-      </div>
-      `);
-  });
-  $('.modal.filtered_products').css('display', 'flex');
-
-}
-
 function load_checkout()
 {
   if(sales_arr.length == 0)
@@ -1511,154 +1661,4 @@ function load_checkout()
     $('input#cost').val(`Total: R${total}`);
     $('.modal.checkout').css('display', 'flex');
   }
-}
-
-function checkout()
-{
-  if($('select#tender').val() == 0)
-  {
-    showAlert('Select Tender', 2);
-    add_err('select#tender');
-  }
-  else
-  {
-    let amount = $('input#amount').val();
-
-    if(!number_only.test(amount) || amount.trim() == '')
-    {
-      showAlert('Enter a Valid Amount', 2);
-      add_err('input#amount');
-    }
-    else
-    {
-      amount = parseFloat(amount);
-      let tender_id = $('select#tender').val();
-
-      if(tender_arr.length == 0)
-      {
-        let tender_onj =
-        {
-          'tender_id': tender_id,
-          'cost': total,
-          'paid': amount,
-          'returned': amount <= total ? 0 : (amount-total)
-        };
-        tender_arr.push(tender_onj);
-      }
-      else
-      {
-        let tender_idx = tender_arr.findIndex(index => index.tender_id == tender_id);
-
-        if(tender_idx < 0)
-        {
-          let tender_onj =
-          {
-            'tender_id': tender_id,
-            'cost': total,
-            'paid': amount,
-            'returned': amount <= total ? 0 : (amount-total)
-          };
-          tender_arr.push(tender_onj);
-        }
-        else
-        {
-          tender_arr[tender_idx].paid += amount;
-          tender_arr[tender_idx].returned = amount <= total ? 0 : (amount-total);
-        }
-      }
-
-      if(total > amount)
-      {
-        total = total - amount;
-      }
-      else
-      {
-        total = 0;
-        complete_checkout();
-      }
-      $('input#cost').val(`Total: R${total}`);
-      $('input#amount').val('')
-    }
-  }
-}
-
-function complete_checkout()
-{
-  $('.modal.checkout').css('display', 'none');
-  total = 0;
-
-  sales_arr.forEach(line =>
-  {
-    total += line.sale_qty * line.cost;
-  });
-
-  $.post('assets/php/index.php',
-  {
-    'operation': 'insert_sale',
-    'total_cost': total,
-    'status': 'c',
-    'bno': bno
-  },
-  function(response)
-  {
-    if(response == 'sum ting wong')
-    {
-      showAlert(response, 2);
-      console.log(response);
-    }
-    else
-    {
-      showAlert('Shit Worked', 1);
-
-      let product_info = [];
-
-      sales_arr.forEach((line) =>
-      {
-        product_info.push(
-          {
-            'id': line.product_id,
-            'qty': line.qty - line.sale_qty
-          });
-      });
-
-      $.post('assets/php/index.php',
-      {
-        'operation': 'complete_sale',
-        'sale_id': response,
-        'product_info': JSON.stringify(product_info),
-        'tenders': JSON.stringify(tender_arr)
-      },
-      function(response)
-      {
-        if(response == '2')
-        {
-          showAlert("Sale Completed", 1);
-          sales_arr = [];
-          tender_arr = [];
-          $('.sales .items table tbody').html('');
-          $('.sales .operations .total p span').html('0');
-
-        }
-        else
-        {
-          console.log(`Sum Ting Wong - ${response}`, 2);
-        }
-      });
-    }
-  });
-}
-
-function clear_fields(inputs)
-{
-  inputs.forEach(input =>
-  {
-    if(input.includes('select'))
-    {
-      $(input).val('0');
-    }
-    else
-    {
-      $(input).val('');
-    }
-  });
 }
