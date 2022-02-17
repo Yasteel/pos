@@ -40,7 +40,8 @@ CREATE TABLE sale
   total_cost DOUBLE,
   sale_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   status VARCHAR(2),
-  branch_no INTEGER NOT NULL
+  branch_no INTEGER NOT NULL,
+  sales_rep INTEGER DEFAULT NULL
 );
 
 CREATE TABLE sales_breakdown

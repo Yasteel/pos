@@ -367,6 +367,37 @@
 
   }
 
+  if($_REQUEST['operation'] == 'fetch_sales_reps')
+  {
+    $sql = "SELECT		A.id, CONCAT(A.fname, ' ', A.surname) full_name
+            FROM		employees A
+            INNER JOIN	roles B
+            ON			A.role = B.id
+            WHERE		B.description LIKE '%sales%';";
+
+    $result = mysqli_query($conn, $sql);
+
+    if(mysqli_num_rows($result) > 0)
+    {
+      $users = array();
+      while($row = $result->fetch_assoc())
+      {
+        $users_obj =
+        [
+          "id"=>$row['id'],
+          "full_name"=>$row['full_name']
+        ];
+
+        array_push($users, $users_obj);
+      }
+      echo json_encode($users);
+    }
+    else
+    {
+      echo '0';
+    }
+  }
+
   if($_REQUEST['operation'] == 'fetch_subcats')
   {
     $cat = $_REQUEST['cat'];

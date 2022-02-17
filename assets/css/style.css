@@ -367,10 +367,17 @@
   height: auto;
 }
 
+.modal.sales_rep .card
+{
+	width: 350px;
+	height: auto
+}
+
 .modal.product_add .card .col,
 .modal.product_edit .card .col,
 .modal.checkout .card .col,
-.modal.user_add .card .col
+.modal.user_add .card .col,
+.modal.sales_rep .card .col
 {
   width: 100%;
 }

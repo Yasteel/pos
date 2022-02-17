@@ -77,7 +77,8 @@
               </table>
               <div class="operations">
                 <div class="total">
-                  <p>Total: R<span></span></p>
+                  <p class="total">Total: R<span></span></p>
+                  <p class="sales_rep">Sales Rep: <span>None</span></p>
                 </div>
                 <div class="sale_btns">
                   <button class="cancel" id="btn_cancel" ><i class="fas fa-times-circle"></i> Cancel Sale</button>
@@ -405,7 +406,27 @@
             <i class="fas fa-times-circle"></i>
           </div>
           <div class="card_body">
-            
+
+          </div>
+        </div>
+      </div>
+      <div class="modal sales_rep">
+        <div class="card">
+          <div class="card_header">
+            <h2>Choose Sales Rep</h2>
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="card_body">
+            <div class="row">
+              <div class="col">
+                <select name="" id="sales_rep"></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button id="btn_select_sales_rep">Select Sales Rep</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
